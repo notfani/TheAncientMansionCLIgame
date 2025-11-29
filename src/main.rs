@@ -1,3 +1,6 @@
+mod game;
+mod dice;
+
 fn main() {
-    println!("Hello, world!");
+    game::start();
 }
