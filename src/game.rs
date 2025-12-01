@@ -1,11 +1,13 @@
-pub fn node_one(){
-    use std::io;
-    loop {
-        println!("\nЧто вы хотите сделать?");
-        println!("1. Осмотреть скелет");
-        println!("2. Попытаться открыть дверь");
+use std::io;
 
-        let mut choice = String::new();
+pub fn node_two(){
+    let mut choice = String::new();
+
+    loop {
+        println!("Что вы хотите сделать дальше?");
+        println!("1. Оторвать пальцы у скелета (они ему больше не нужны)");
+        println!("2. Ничего не делать");
+
         if io::stdin().read_line(&mut choice).is_err() {
             print!("Ошибка ввода. Попробуйте снова.");
             continue;
@@ -13,10 +15,80 @@ pub fn node_one(){
 
         match choice.trim() {
             "1" => {
-                println!("Вы осматриваете скелет и находите ключ в его руке!");
+                println!("Вы осторожно отрываете пальцы скелета. Вы замечаете, \
+                что пальцы скелета можно просунуть в замок двери, чтобы попытаться его открыть.");
+
+                loop {
+                    println!("Что вы хотите сделать?");
+                    println!("1. Попытаться открыть дверь с помощью пальцев скелета");
+                    println!("2. Ничего не делать");
+
+                    choice.clear();
+                    if io::stdin().read_line(&mut choice).is_err() {
+                        print!("Ошибка ввода. Попробуйте снова.");
+                        continue;
+                    }
+
+                    match choice.trim() {
+                        "1" => {
+                            let roll: u8 = crate::dice::roll_1d20();
+                            if roll >= 15 {
+                                println!("Вы успешно открываете дверь и выходите из комнаты!");
+                                return;
+                            } else {
+                                println!("Вы не смогли открыть дверь. Пальцы сломались при попытке.");
+                                return;
+                            }
+                        }
+                        "2" => {
+                            break;
+                        }
+                        _ => {
+                            println!("Неверный выбор, попробуйте снова.");
+                            continue;
+                        }
+                    }
+                }
+
+            },
+            "2" => {
+                break;
+            },
+            _ => {
+                println!("Неверный выбор, попробуйте снова.");
+                continue;
+            }
+        }
+    }
+}
+
+
+pub fn node_one(){
+    let mut noise: bool = false;
+    let mut choice = String::new();
+
+    loop {
+        println!("\nЧто вы хотите сделать?");
+        println!("1. Осмотреть скелет");
+        println!("2. Попытаться открыть дверь");
+
+        if io::stdin().read_line(&mut choice).is_err() {
+            print!("Ошибка ввода. Попробуйте снова.");
+            continue;
+        }
+
+        match choice.trim() {
+            "1" => {
+                println!("Вы осматриваете скелет и видите, что он лежит здесь довольно давно. \
+                Он едва держиться вместе, при малейшем касании, скелет просто развалится. \
+                Вы замечаете, что ничего ценного у него нет, но сами кости довольно прочные, а \
+                его пальцы очень длинные и тонкие.");
+
+                node_two();
                 break;
             },
             "2" => {
+                noise = true;
                 let roll: u8 = crate::dice::roll_1d20();
                 if roll >= 15 {
                     println!("Вы успешно открываете дверь и выходите из комнаты!");
