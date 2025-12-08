@@ -32,7 +32,7 @@ pub fn node_two(){
                     match choice.trim() {
                         "1" => {
                             let roll: u8 = crate::dice::roll_1d20();
-                            if roll >= 15 {
+                            if roll >= 8 {
                                 println!("Вы успешно открываете дверь и выходите из комнаты!");
                                 return;
                             } else {
@@ -41,7 +41,7 @@ pub fn node_two(){
                             }
                         }
                         "2" => {
-                            break;
+                            return;
                         }
                         _ => {
                             println!("Неверный выбор, попробуйте снова.");
@@ -72,6 +72,7 @@ pub fn node_one(){
         println!("1. Осмотреть скелет");
         println!("2. Попытаться открыть дверь");
 
+        choice.clear();
         if io::stdin().read_line(&mut choice).is_err() {
             print!("Ошибка ввода. Попробуйте снова.");
             continue;
@@ -85,7 +86,6 @@ pub fn node_one(){
                 его пальцы очень длинные и тонкие.");
 
                 node_two();
-                break;
             },
             "2" => {
                 noise = true;
