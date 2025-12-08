@@ -1,6 +1,6 @@
 use std::io;
 
-pub fn node_two(){
+pub fn node_two() -> bool {
     let mut choice = String::new();
 
     loop {
@@ -34,14 +34,14 @@ pub fn node_two(){
                             let roll: u8 = crate::dice::roll_1d20();
                             if roll >= 8 {
                                 println!("Вы успешно открываете дверь и выходите из комнаты!");
-                                return;
+                                return true; // Дверь открыта
                             } else {
                                 println!("Вы не смогли открыть дверь. Пальцы сломались при попытке.");
-                                return;
+                                break; // Выходим из внутреннего цикла, чтобы предложить выломать дверь
                             }
                         }
                         "2" => {
-                            return;
+                            return false;
                         }
                         _ => {
                             println!("Неверный выбор, попробуйте снова.");
@@ -50,9 +50,34 @@ pub fn node_two(){
                     }
                 }
 
+                // Если дошли сюда - пальцы сломались, предлагаем выломать дверь
+                println!("\nЧто вы хотите сделать?");
+                println!("1. Попытаться выломать дверь");
+                println!("2. Ничего не делать");
+
+                choice.clear();
+                if io::stdin().read_line(&mut choice).is_err() {
+                    print!("Ошибка ввода. Попробуйте снова.");
+                    return false;
+                }
+
+                match choice.trim() {
+                    "1" => {
+                        println!("Вы с силой бьете в дверь и она поддается! Вы выходите из комнаты!");
+                        return true;
+                    }
+                    "2" => {
+                        return false;
+                    }
+                    _ => {
+                        println!("Неверный выбор.");
+                        return false;
+                    }
+                }
+
             },
             "2" => {
-                break;
+                return false;
             },
             _ => {
                 println!("Неверный выбор, попробуйте снова.");
@@ -64,7 +89,7 @@ pub fn node_two(){
 
 
 pub fn node_one(){
-    let mut noise: bool = false;
+    let mut _noise: bool = false;
     let mut choice = String::new();
 
     loop {
@@ -85,17 +110,48 @@ pub fn node_one(){
                 Вы замечаете, что ничего ценного у него нет, но сами кости довольно прочные, а \
                 его пальцы очень длинные и тонкие.");
 
-                node_two();
+                if node_two() {
+                    // Дверь открыта, выходим в коридор
+                    return;
+                }
+                // Если вернулось false, продолжаем цикл
             },
             "2" => {
-                noise = true;
+                _noise = true;
                 let roll: u8 = crate::dice::roll_1d20();
                 if roll >= 15 {
                     println!("Вы успешно открываете дверь и выходите из комнаты!");
+                    return;
                 } else {
                     println!("Вы не смогли открыть дверь.");
+
+                    // Предлагаем выломать дверь
+                    loop {
+                        println!("\nЧто вы хотите сделать?");
+                        println!("1. Попытаться выломать дверь");
+                        println!("2. Попробовать что-то другое");
+
+                        choice.clear();
+                        if io::stdin().read_line(&mut choice).is_err() {
+                            print!("Ошибка ввода. Попробуйте снова.");
+                            continue;
+                        }
+
+                        match choice.trim() {
+                            "1" => {
+                                println!("Вы с силой бьете в дверь и она поддается! Вы выходите из комнаты!");
+                                return;
+                            }
+                            "2" => {
+                                break; // Возвращаемся к основному меню комнаты
+                            }
+                            _ => {
+                                println!("Неверный выбор, попробуйте снова.");
+                                continue;
+                            }
+                        }
+                    }
                 }
-                break;
             },
             _ => {
                 println!("Неверный выбор, попробуйте снова.");
